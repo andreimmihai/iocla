@@ -7,11 +7,14 @@ section .data
     arr: dd 19, 7, 129, 87, 54, 218, 67, 12, 19, 99
     len: equ $-arr
 
-    print_format: db "max: %u", 13, 10, 0
+    pos: dd 0 ; pozitia maximului
+
+    print_format: db "max: %u, pos: %u", 13, 10, 0
 
 section .text
 
 global main
+extern get_max
 
 main:
     push ebp
@@ -23,12 +26,15 @@ main:
     mov eax, len
     shr eax, 2
 
+    push pos
     push eax
     push arr
     call get_max
     add esp, 8
 
-    ; Print max.
+    ; Print max and position.
+    mov edx, [pos]
+    push edx
     push eax
     push print_format
     call printf
